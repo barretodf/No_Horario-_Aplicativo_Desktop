@@ -24,3 +24,7 @@ Thumbs.db
 
 # Configurações do Git
 .git/
+
+node_modules/
+Instalador/*.exe
+dist/
