@@ -3,17 +3,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const taskList = document.getElementById("taskList");
     const addButton = document.getElementById("addTask");
 
-    let tasks = await window.api.loadTasks(); // Carrega tarefas salvas
+    let tasks = await window.electronAPI.loadTasks();
+
+    function saveTasks() {
+        window.electronAPI.saveTasks(tasks);
+    }
 
     function renderTasks() {
         taskList.innerHTML = "";
-        tasks.forEach((task, index) => {
+        tasks.forEach((taskText, index) => {
             const li = document.createElement("li");
             li.classList.add("task-container");
-            if (task.done) li.classList.add("done");
 
             li.innerHTML = `
-                <span class="task-text">${task.text}</span>
+                <span class="task-text">${taskText}</span>
                 <div class="task-buttons">
                     <button class="complete">✅</button>
                     <button class="delete">X</button>
@@ -21,14 +24,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
 
             li.querySelector(".complete").addEventListener("click", () => {
-                tasks[index].done = !tasks[index].done;
-                window.api.saveTasks(tasks);
-                renderTasks();
+                li.classList.toggle("done");
             });
 
             li.querySelector(".delete").addEventListener("click", () => {
                 tasks.splice(index, 1);
-                window.api.saveTasks(tasks);
+                saveTasks();
                 renderTasks();
             });
 
@@ -40,16 +41,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         const taskText = taskInput.value.trim();
         if (taskText === "") return;
 
-        tasks.push({ text: taskText, done: false });
-        window.api.saveTasks(tasks);
-        taskInput.value = "";
+        tasks.push(taskText);
+        saveTasks();
         renderTasks();
+        taskInput.value = "";
     }
 
     addButton.addEventListener("click", addTask);
     taskInput.addEventListener("keypress", (event) => {
-        if (event.key === "Enter") addTask();
+        if (event.key === "Enter") {
+            addTask();
+        }
     });
 
-    renderTasks(); // Exibir tarefas ao iniciar
+    renderTasks();
 });

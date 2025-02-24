@@ -3,18 +3,29 @@ const fs = require('fs');
 const path = require('path');
 
 let mainWindow;
-const tasksFile = path.join(app.getPath('userData'), 'tasks.json'); // Salva no diretório do usuário
+
+// ✅ Certifique-se de que esta variável é declarada antes de ser usada
+const tasksFile = path.join(app.getPath('userData'), 'tasks.json'); 
 
 function loadTasks() {
     try {
-        return JSON.parse(fs.readFileSync(tasksFile, 'utf-8'));
+        if (fs.existsSync(tasksFile)) {
+            return JSON.parse(fs.readFileSync(tasksFile, 'utf-8'));
+        } else {
+            return [];
+        }
     } catch (error) {
-        return []; // Retorna uma lista vazia se o arquivo não existir
+        console.error("Erro ao carregar tarefas:", error);
+        return [];
     }
 }
 
 function saveTasks(tasks) {
-    fs.writeFileSync(tasksFile, JSON.stringify(tasks, null, 2));
+    try {
+        fs.writeFileSync(tasksFile, JSON.stringify(tasks, null, 2), 'utf-8');
+    } catch (error) {
+        console.error("Erro ao salvar tarefas:", error);
+    }
 }
 
 app.whenReady().then(() => {
@@ -23,7 +34,9 @@ app.whenReady().then(() => {
         height: 600,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'), // Adicionamos um preload.js para segurança
-            contextIsolation: true
+            contextIsolation: true,
+            enableRemoteModule: false,
+            nodeIntegration: false
         }
     });
 
