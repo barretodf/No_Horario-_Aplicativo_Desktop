@@ -2,15 +2,26 @@
   "name": "no_horario",
   "version": "1.0.0",
   "main": "main.js",
-  "scripts": {
-  "start": "electron ."
-},
-  "keywords": [],
-  "author": "",
+  "description": "Gerenciador de tarefas no_horario",
+  "author": "Edmilson Barreto",
   "license": "ISC",
   "type": "commonjs",
-  "description": "",
+  "scripts": {
+    "start": "electron ."
+  },
   "devDependencies": {
-    "electron": "^34.2.0"
+    "electron": "^34.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.edmilson.nohorario",
+    "productName": "no_horario",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    }
   }
 }

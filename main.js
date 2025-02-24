@@ -5,7 +5,7 @@ const path = require('path');
 let mainWindow;
 
 // ✅ Certifique-se de que esta variável é declarada antes de ser usada
-const tasksFile = path.join(app.getPath('userData'), 'tasks.json'); 
+const tasksFile = path.join(app.getPath('userData'), 'tasks.json');
 
 function loadTasks() {
     try {
@@ -32,8 +32,9 @@ app.whenReady().then(() => {
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
+        icon: path.join(__dirname, 'assets', 'icon.ico'), // ✅ Ícone dentro da pasta assets
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js'), // Adicionamos um preload.js para segurança
+            preload: path.join(__dirname, 'preload.js'), // ✅ Adicionamos um preload.js para segurança
             contextIsolation: true,
             enableRemoteModule: false,
             nodeIntegration: false
