@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <link rel="stylesheet" href="style.css">
     <title>No Horário</title>
 </head>
 <body>
-    <h1>Gerenciador de Tarefas - No Horário</h1>
-    <p>Interface em desenvolvimento...</p>
+    <h1>No Horário - Gerenciador de Tarefas</h1>
+    <div class="input-container">
+        <input type="text" id="taskInput" placeholder="Adicionar nova tarefa">
+        <button id="addTask">Adicionar</button>
+    </div>
+    <ul id="taskList"></ul>
+
+    <script src="renderer.js"></script>
 </body>
 </html>

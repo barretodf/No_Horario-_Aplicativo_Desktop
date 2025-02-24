@@ -7,7 +7,9 @@ app.whenReady().then(() => {
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,  // Pode ser necessário desativar se for usar preload.js
+            contextIsolation: true, // Aumenta a segurança
+            enableRemoteModule: false
         }
     });
 
@@ -19,7 +21,8 @@ app.whenReady().then(() => {
                 width: 800,
                 height: 600,
                 webPreferences: {
-                    nodeIntegration: true
+                    nodeIntegration: true,
+                    contextIsolation: true
                 }
             });
             mainWindow.loadFile('index.html');
