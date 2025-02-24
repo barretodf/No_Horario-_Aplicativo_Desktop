@@ -1,0 +1,26 @@
+# Dependências do Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Builds e distribuições do Electron
+dist/
+build/
+out/
+*.asar
+
+# Configurações do Electron e arquivos temporários
+.cache/
+.electron/
+.electron-builder-cache/
+.temp/
+logs/
+*.log
+
+# Configurações do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Configurações do Git
+.git/
