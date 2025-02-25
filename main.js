@@ -1,54 +1,41 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
-const fs = require('fs');
-const path = require('path');
+const { app, BrowserWindow, ipcMain } = require("electron");
+const fs = require("fs");
+const path = require("path");
 
-let mainWindow;
+let tasks = [];
+const filePath = path.join(app.getPath("userData"), "tasks.json");
 
-// ✅ Certifique-se de que esta variável é declarada antes de ser usada
-const tasksFile = path.join(app.getPath('userData'), 'tasks.json');
-
+// Carregar tarefas do arquivo JSON
 function loadTasks() {
-    try {
-        if (fs.existsSync(tasksFile)) {
-            return JSON.parse(fs.readFileSync(tasksFile, 'utf-8'));
-        } else {
-            return [];
-        }
-    } catch (error) {
-        console.error("Erro ao carregar tarefas:", error);
-        return [];
+    if (fs.existsSync(filePath)) {
+        const data = fs.readFileSync(filePath);
+        tasks = JSON.parse(data);
     }
 }
 
-function saveTasks(tasks) {
-    try {
-        fs.writeFileSync(tasksFile, JSON.stringify(tasks, null, 2), 'utf-8');
-    } catch (error) {
-        console.error("Erro ao salvar tarefas:", error);
-    }
+// Salvar tarefas no arquivo JSON
+function saveTasks() {
+    fs.writeFileSync(filePath, JSON.stringify(tasks, null, 2));
 }
 
 app.whenReady().then(() => {
-    mainWindow = new BrowserWindow({
+    loadTasks();
+    const win = new BrowserWindow({
         width: 800,
         height: 600,
-        icon: path.join(__dirname, 'assets', 'icon.ico'), // ✅ Ícone dentro da pasta assets
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js'), // ✅ Adicionamos um preload.js para segurança
+            nodeIntegration: false,
             contextIsolation: true,
-            enableRemoteModule: false,
-            nodeIntegration: false
-        }
+            preload: path.join(__dirname, "preload.js"),
+        },
     });
 
-    mainWindow.loadFile('index.html');
+    win.loadFile("index.html");
 });
 
-ipcMain.handle('loadTasks', () => loadTasks());
-ipcMain.on('saveTasks', (event, tasks) => saveTasks(tasks));
-
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+// Handlers para carregar e salvar tarefas
+ipcMain.handle("loadTasks", () => tasks);
+ipcMain.handle("saveTasks", (event, newTasks) => {
+    tasks = newTasks;
+    saveTasks();
 });

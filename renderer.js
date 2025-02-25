@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             li.innerHTML = `
                 <span class="task-text">${taskText}</span>
                 <div class="task-buttons">
+                    <button class="edit">✏️</button>
                     <button class="complete">✅</button>
                     <button class="delete">X</button>
                 </div>
@@ -31,6 +32,35 @@ document.addEventListener("DOMContentLoaded", async () => {
                 tasks.splice(index, 1);
                 saveTasks();
                 renderTasks();
+            });
+
+            // Botão de editar tarefa
+            li.querySelector(".edit").addEventListener("click", () => {
+                const span = li.querySelector(".task-text");
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = taskText;
+                input.classList.add("edit-input");
+
+                span.replaceWith(input);
+                input.focus();
+
+                input.addEventListener("blur", () => {
+                    const newText = input.value.trim();
+                    if (newText) {
+                        tasks[index] = newText;
+                        saveTasks();
+                        renderTasks();
+                    } else {
+                        renderTasks(); // Cancela edição se o campo estiver vazio
+                    }
+                });
+
+                input.addEventListener("keypress", (event) => {
+                    if (event.key === "Enter") {
+                        input.blur();
+                    }
+                });
             });
 
             taskList.appendChild(li);
