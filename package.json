@@ -7,7 +7,7 @@
   "license": "ISC",
   "type": "commonjs",
   "scripts": {
-    "start": "electron .",
+    "start": "electron . --no-sandbox",
     "build": "electron-builder"
   },
   "devDependencies": {
@@ -23,6 +23,12 @@
     "win": {
       "target": "nsis",
       "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "icon": "assets/icon.png"
     }
   }
 }

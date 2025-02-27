@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             li.innerHTML = `
                 <span class="task-text">${taskText}</span>
                 <div class="task-buttons">
+                    <button class="move-up">🔼</button>
+                    <button class="move-down">🔽</button>
                     <button class="edit">✏️</button>
                     <button class="complete">✅</button>
                     <button class="delete">X</button>
@@ -34,7 +36,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 renderTasks();
             });
 
-            // Botão de editar tarefa
             li.querySelector(".edit").addEventListener("click", () => {
                 const span = li.querySelector(".task-text");
                 const input = document.createElement("input");
@@ -52,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         saveTasks();
                         renderTasks();
                     } else {
-                        renderTasks(); // Cancela edição se o campo estiver vazio
+                        renderTasks();
                     }
                 });
 
@@ -61,6 +62,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                         input.blur();
                     }
                 });
+            });
+
+            // Função para mover para cima
+            li.querySelector(".move-up").addEventListener("click", () => {
+                if (index > 0) {
+                    [tasks[index], tasks[index - 1]] = [tasks[index - 1], tasks[index]];
+                    saveTasks();
+                    renderTasks();
+                }
+            });
+
+            // Função para mover para baixo
+            li.querySelector(".move-down").addEventListener("click", () => {
+                if (index < tasks.length - 1) {
+                    [tasks[index], tasks[index + 1]] = [tasks[index + 1], tasks[index]];
+                    saveTasks();
+                    renderTasks();
+                }
             });
 
             taskList.appendChild(li);
