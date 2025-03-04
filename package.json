@@ -20,6 +20,13 @@
     "directories": {
       "output": "dist"
     },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "assets/**/*",
+      "tasks.json"
+    ],
     "win": {
       "target": "nsis",
       "icon": "assets/icon.ico"
