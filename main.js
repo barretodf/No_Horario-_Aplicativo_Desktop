@@ -22,8 +22,8 @@ function saveTasks() {
 function checkTaskNotifications() {
     const now = new Date();
 
-    tasks.forEach((task, index) => {
-        if (!task.time) return; // Se a tarefa não tem horário, ignora
+    tasks.forEach((task) => {
+        if (!task.time || task.notified) return; // Se a tarefa não tem horário ou já foi notificada, ignora
 
         const taskTime = new Date(task.time); // Converte string para objeto Date
 
@@ -34,9 +34,9 @@ function checkTaskNotifications() {
                 body: `Está na hora de: ${task.text}` 
             }).show();
 
-            // Remover a tarefa da lista após a notificação (evita repetir)
-            tasks.splice(index, 1);
-            saveTasks();
+            // Marcar a tarefa como notificada imediatamente
+            task.notified = true;
+            saveTasks(); // Salvar a lista atualizada no arquivo JSON
         }
     });
 }
