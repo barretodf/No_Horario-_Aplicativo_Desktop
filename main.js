@@ -10,31 +10,12 @@ function loadTasks() {
     if (fs.existsSync(filePath)) {
         const data = fs.readFileSync(filePath);
         tasks = JSON.parse(data);
-
-        // Marcar tarefas com horários passados como notificadas ao carregar o app
-        const now = new Date();
-        tasks.forEach((task) => {
-            if (task.time && new Date(task.time) <= now) {
-                task.notified = true; // Marca como notificada
-            }
-        });
-        saveTasks(); // Salva as alterações no arquivo JSON
     }
 }
 
 // Função para salvar tarefas no arquivo JSON
 function saveTasks() {
     fs.writeFileSync(filePath, JSON.stringify(tasks, null, 2));
-}
-
-// Função para limpar tarefas antigas (notificadas e com horários passados)
-function cleanOldTasks() {
-    const now = new Date();
-    tasks = tasks.filter((task) => {
-        // Mantém apenas tarefas futuras ou não notificadas
-        return !task.notified || new Date(task.time) > now;
-    });
-    saveTasks(); // Salva a lista atualizada
 }
 
 // Função para verificar e disparar notificações de tarefas pendentes
@@ -53,7 +34,7 @@ function checkTaskNotifications() {
                 body: `Está na hora de: ${task.text}` 
             }).show();
 
-            // Marcar a tarefa como notificada imediatamente
+            // Marcar a tarefa como notificada (sem removê-la da lista)
             task.notified = true;
             saveTasks(); // Salvar a lista atualizada no arquivo JSON
         }
@@ -63,7 +44,6 @@ function checkTaskNotifications() {
 // Inicialização do aplicativo
 app.whenReady().then(() => {
     loadTasks(); // Carrega as tarefas ao iniciar o app
-    cleanOldTasks(); // Limpa tarefas antigas
 
     // Configura a janela principal
     const win = new BrowserWindow({
